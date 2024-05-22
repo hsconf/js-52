@@ -1,17 +1,29 @@
 import './App.css';
-import Card from "./Components/Cards/card.tsx";
-import {useState} from "react";
+import React, { useState } from 'react';
+import Card from "./Components/Cards/card.tsx"
+import CardDeck from './lib/card/CardDeck';
+import CardModel from './lib/card/Card';
 
-const App = () => {
-    const [suit, setSuit] = useState<suit[]>(['♦','♥','♣','♠']);
-    console.log(suit);
+const App: React.FC = () => {
+    const [hand, setHand] = useState<CardModel[]>([]);
+
+    const dealCards = () => {
+        const deck = new CardDeck();
+        setHand(deck.getCards(5));
+    };
+
     return (
-      <>
-        <div className="playingCards faceImages">
-          <Card rank={'5'} suit={'clubs'} suitType={suit[1]}></Card>
+        <div className="App">
+            <button onClick={dealCards}>Раздать карты</button>
+            {hand.length > 0 && (
+                <div className="playingCards faceImages">
+                    {hand.map((card, index) => (
+                        <Card key={index} rank={card.rank} suit={card.suit} />
+                    ))}
+                </div>
+            )}
         </div>
-      </>
-  );
+    );
 };
 
 export default App;
